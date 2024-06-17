@@ -1,0 +1,81 @@
+
+h1,label,p,h3{
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+button{
+    cursor: pointer;
+}
+
+div{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 25px;
+}
+
+#candlestickChart{
+    height: 75%;
+    width:100%;
+}
+
+#close-indicator{
+    width:100%;
+    height:100%;
+}
+
+#info-div{
+    display: inline-block;
+    width:100px;
+    height: 50px;
+}
+
+
+
+#container{
+    background-color: rgba(17,22,35);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 50px repeat(9, 200px) 50px;
+    grid-gap: 1em;
+    padding: 1em;
+}
+
+.heading-card{
+    grid-row: 1/2;
+    grid-column: 1/2;
+}
+
+.dropdown-card{
+    grid-row: 2/3;
+    grid-column: 1/2;
+}
+
+.indicator-card{
+    grid-row: 2/3;
+    grid-column: 2/3;
+}
+
+.chart-card{
+    grid-row: 3/6;
+    grid-column: 1/4;
+  
+}
+
+.time-filter-btns{
+    display:flex;
+    flex-direction: row;
+    gap: 1em;
+}
+
+#info-card{
+    grid-row: 3/5;
+    grid-column: 4/5;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #1B232F;
+}
+
+#info-card p, #info-card h3{
+    flex: 1 1 auto;
+    margin: 10px;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/styles.css')}}">
+
+</head>
+<body>
+<div id="container">
+    <div class="heading-card">
+        <h1>Stock Dashboard</h1><div id="info-div"></div>
+    </div>
+    <div class="dropdown-card">
+        <label for="stocks">Choose a stock:</label>
+        <select name="symbol" id="symbol">
+            {% for symbol in symbols %}
+            <option value="{{symbol.Symbol}}">{{symbol.Symbol}} - {{symbol.Security}}</option>
+            {% endfor %}
+        </select>
+        <button id="stocksubmit" onclick=candlestickPlot()>Submit</button>
+    </div>
+{% block body %}
+{% endblock %}
+
+</div>
+
+  <!-- Include Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
+  <script src= "{{url_for('static', filename='js/script.js')}}"></script>
+</body>
+
+
+
+</html>

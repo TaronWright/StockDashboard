@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/styles.css')}}">
+
+</head>
+<body>
+    <h1>Hello World</h1><div id="info-div"><button id="info-btn">Info</button></div>
+
+    <form>
+        <label for="cryptos">Choose a Cryptocurrency:</label>
+        <select name="symbol" id="symbol">
+            {% for coin_name in coin_names %}
+            <option value="{{coin_name['Symbol']}}-USD">{{coin_name['Symbol']}} - {{coin_name['Coin Name']}}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <button id="stocksubmit" onclick=candlestickPlot()>Submit</button>
+
+{% block body %}
+{% endblock %}
+
+
+  <!-- Include Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
+  <script src= "{{url_for('static', filename='js/script.js')}}"></script>
+</body>
+
+
+
+</html>
