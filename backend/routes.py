@@ -41,11 +41,11 @@ def stock():
         case "3mo":
             interval = "1d"
         case "1mo":
-            interval = "1d"
+            interval = "1h"
         case "5d":
             interval = "1h"
         case "1d":
-            interval = "15m"
+            interval = "5m"
 
     print(interval)
     
@@ -123,6 +123,16 @@ def stock_financials():
     financials_json = financials.to_dict(orient="list")
     print(financials_json)
     res = make_response(jsonify(financials_json),200)
+    return res
+
+@app.route("/news", methods=["POST","GET"])
+def stock_news():
+    stock_json = request.get_json()
+    symbol = stock_json["Symbol"]
+    ticker = yf.Ticker(symbol)
+    news = ticker.news
+    print(news)
+    res = make_response(jsonify(news),200)
     return res
 
 @app.route("/crypto", methods=["POST", "GET"])

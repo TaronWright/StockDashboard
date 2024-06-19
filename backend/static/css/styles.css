@@ -3,29 +3,31 @@ h1,label,p,h3{
     color: white;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
 button{
     cursor: pointer;
 }
 
-div{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 25px;
-}
 
 #candlestickChart{
     height: 75%;
     width:100%;
+    border-radius: 25px;
 }
 
 #close-indicator{
     width:100%;
     height:100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 25px;
 }
 
 #info-div{
     display: inline-block;
     width:100px;
     height: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 25px;
 }
 
 
@@ -37,6 +39,8 @@ div{
     grid-template-rows: 50px repeat(9, 200px) 50px;
     grid-gap: 1em;
     padding: 1em;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 25px;
 }
 
 .heading-card{
@@ -57,6 +61,8 @@ div{
 .chart-card{
     grid-row: 3/6;
     grid-column: 1/4;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 25px;
   
 }
 
@@ -73,6 +79,8 @@ div{
     flex-direction: column;
     padding: 10px;
     background-color: #1B232F;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 25px;
 }
 
 #info-card p, #info-card h3{

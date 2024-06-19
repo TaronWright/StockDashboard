@@ -84,16 +84,19 @@ async function candlestickPlot(period="1y"){
       }
 
       // Calculate the MACD Histogram
-      var macdHistTrace = {
+      var macdBarTrace = {
         x: stock_json['Date'],
         y: stock_json['MACD-Hisogram'],
-        name: "Histogram",
-        type: "histogram",
-        start: Math.min(...stock_json['Date']), // Minimum value for binning
-        end: Math.max(...stock_json['Date']), // Maximum value for binning
-        size: (Math.max(...stock_json['Date']) - Math.min(...stock_json['Date'])) / stock_json['Date'].length, // Calculate bin size based on data range
-        custombins: d => binByDay(d) // Use the custom binning function
+        name: "bar",
+        type: "bar",
+        marker: {}
       }
+
+      // Loop through y values and format colour depending on value
+      macdBarTrace.marker.color = macdBarTrace.y.map(function(value){
+         return value <= 0 ? "red" : "green"
+      }
+      )
 
     const macdLayout = {
         title:{
@@ -120,7 +123,7 @@ async function candlestickPlot(period="1y"){
           }
         };
 
-    const macdData = [macdTrace, signalTrace, macdHistTrace]
+    const macdData = [macdTrace, signalTrace, macdBarTrace]
     let macdElement = document.getElementById("macd")
     // Plot the MACD Chart
     Plotly.newPlot(macdElement, macdData, macdLayout, {responsive:true});
@@ -128,12 +131,11 @@ async function candlestickPlot(period="1y"){
     let indicatorElement = document.querySelector("#close-indicator")
 
 
-
     var indicatorData = [
         {
           type: "indicator",
           mode: "number+delta",
-          value: stock_json['Close'].slice(-1)[0],
+          value: stock_json['Open'].slice(-1)[0].toFixed(2),
           title: {
             text:
               "Stock Ticker",
@@ -142,7 +144,7 @@ async function candlestickPlot(period="1y"){
             }
           },
           domain: { x: [0, 1], y: [0, 1] },
-          delta: { reference: stock_json['Open'].slice(-1)[0], relative: true, position: "top" }
+          delta: { reference: stock_json['Open'][0].toFixed(2), relative: true, position: "top", valueformat:'.2%'}
         }
       ];
       
@@ -169,14 +171,16 @@ async function candlestickPlot(period="1y"){
 
     //   console.log(info_json)
 
-      stockInfo(postData)
+      stockInfo()
+      stockFinancials()
+      stockNews()
 }
 
 
 
 
 
-let stockInfo = async (postDate) => {
+let stockInfo = async () => {
     let stockSymbol = document.getElementById("symbol").value
     let postData = {"Symbol": stockSymbol}
 
@@ -190,7 +194,7 @@ let stockInfo = async (postDate) => {
     )
     let json = await response.json()
     console.log(json)
-    
+
     // Set the contents of all the about headings
     // document.getElementById("info-summary").innerText = 'Summary: ' + json['longBusinessSummary']
     document.getElementById("info-industry").innerText = 'Industry: ' + json['industry']
@@ -203,5 +207,54 @@ let stockInfo = async (postDate) => {
 }
 
 
+
+let stockFinancials = async () => {
+  let stockSymbol = document.getElementById("symbol").value
+  let postData = {"Symbol": stockSymbol}
+
+  let response = await fetch("/financials",
+    {
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json"
+        },
+        "body": JSON.stringify(postData)
+      }
+    )
+
+    let json = await response.json()
+    console.log(json)
+}
+
+
+let stockNews = async () => {
+  let stockSymbol = document.getElementById("symbol").value
+  let postData = {"Symbol": stockSymbol}
+
+  let response = await fetch("/news",
+    {
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json"
+        },
+        "body": JSON.stringify(postData)
+      }
+    )
+
+    let json = await response.json()
+    console.log(json)
+}
+
+
+// Function that converts an array of string dates into Date objects
+dateConvert = (dates) => {
+  // .map(function(){}) or /.map(()=>) applies to every element in the array
+  const dateObjects = dates.map(date => new Date(date))
+  return dateObjects
+}
+
+
 candlestickPlot()
+
+
 
