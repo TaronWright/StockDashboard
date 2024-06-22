@@ -4,7 +4,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import os 
 import requests
-from . import app
+from . import application
 
 # load the .env file
 load_dotenv()
@@ -12,21 +12,21 @@ load_dotenv()
 av_api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
 
 #read the stock tickers csv file
-yh_sym = pd.read_csv("static/flat-ui__data.csv")
+yh_sym = pd.read_csv("application/static/flat-ui__data.csv")
 symbols = yh_sym[['Symbol', "Security"]]
 
-crypto = pd.read_csv("static/CryptocurrencyData.csv")
+crypto = pd.read_csv("application/static/CryptocurrencyData.csv")
 crypto_coins = crypto[['Coin Name',"Symbol"]]
 
 
 
-@app.route("/")
+@application.route("/")
 def index():
     stock_symbols = symbols.to_dict(orient="records")
     return render_template("stock.html", symbols=stock_symbols)
 
 
-@app.route("/stock",methods=["POST","GET"])
+@application.route("/stock",methods=["POST","GET"])
 def stock():
     stock = request.get_json()
     symbol = stock["Symbol"]
@@ -102,7 +102,7 @@ def stock():
     return res
 
 
-@app.route("/info",methods=["POST","GET"])
+@application.route("/info",methods=["POST","GET"])
 def stock_info():
     stock_json = request.get_json() # convert json into python dict
     symbol = stock_json['Symbol']
@@ -111,7 +111,7 @@ def stock_info():
     res = make_response(jsonify(info),200)
     return res
 
-@app.route("/financials", methods=["POST","GET"])
+@application.route("/financials", methods=["POST","GET"])
 def stock_financials():
     stock_json = request.get_json()
     symbol = stock_json["Symbol"]
@@ -125,7 +125,7 @@ def stock_financials():
     res = make_response(jsonify(financials_json),200)
     return res
 
-@app.route("/news", methods=["POST","GET"])
+@application.route("/news", methods=["POST","GET"])
 def stock_news():
     stock_json = request.get_json()
     symbol = stock_json["Symbol"]
@@ -135,7 +135,7 @@ def stock_news():
     res = make_response(jsonify(news),200)
     return res
 
-@app.route("/crypto", methods=["POST", "GET"])
+@application.route("/crypto", methods=["POST", "GET"])
 def crypto():
     if request.method == "POST":
         crpyto_data = request.get_json()

@@ -12,4 +12,7 @@ application.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///accounts.db"
 application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
+## To avoid circular import we import our routes after we create
+## our application instance
+
 from . import routes
