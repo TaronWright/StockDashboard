@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block body %}
+<table class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th scope="col">Ticker</th>
+        <th scope="col">Change</th>
+        <th scope="col">Price</th>
+        <th scope="col">Vol</th>
+        <th scope="col">Float</th>
+        <th scope="col">MCAP</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for item in ticker_dict %}
+      <tr>
+        <td>{{item['Ticker']}}</td>
+        <td>{{item['Change']}}</td>
+        <td>{{item['Price']}}</td>
+        <td>{{item['Volume']}}</td>
+        <td>{{item['Float']}}</td>
+        <td>{{item['MCAP']}}</td>
+      </tr>
+       {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
+
+
+{% block extraScripts %}
+
+<script>
+    console.log({{ticker_dict|tojson}})
+</script>
+{% endblock %}

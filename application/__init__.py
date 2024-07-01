@@ -15,4 +15,5 @@ application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 ## To avoid circular import we import our routes after we create
 ## our application instance
 
-from . import routes
+from application import routes
+from application import error_handler

@@ -1,11 +1,22 @@
 async function candlestickPlot(period="1y"){
+  // Start the spinner animation beside the Submit button
+    let spinner = document.getElementById("submit-spinner")
+    spinner.style.display = "inline-block"
+  
+  // Grab the data attribute value of the input html
+    const searchInput = document.getElementById("searchInput")
+    const stockSymbol = searchInput.getAttribute('data-search-symbol')
 
-    let stockSymbol = document.getElementById("symbol").value
 
     let postData = {
         "Symbol": stockSymbol, 
         "Period": period
     }
+
+
+      // Grab the data attribute value of the input html
+      // const candlestickChart = document.getElementById("candlestickChart")
+      // const candlestickChartData = searchInput.setAttribute('data-candlestick',)
 
     let response = await fetch("/stock", {
         "method": "POST",
@@ -40,7 +51,7 @@ async function candlestickPlot(period="1y"){
 
       const candlestickLayout = {
         title: {
-            text:'Candle Stick Chart',
+            text:'Candle Stick Chart - ' + stockSymbol,
         },
         xaxis: {
             rangeslider: {
@@ -138,7 +149,7 @@ async function candlestickPlot(period="1y"){
           value: stock_json['Open'].slice(-1)[0].toFixed(2),
           title: {
             text:
-              "Stock Ticker",
+              "Price (USD)",
             font: {
                 color: "#FFFFFF"
             }
@@ -158,22 +169,14 @@ async function candlestickPlot(period="1y"){
       
       Plotly.newPlot(indicatorElement, indicatorData, indicatorLayout);
 
-
-    //   response = await fetch("/info", {
-    //     method: "POST",
-    //     headers: {
-    //         "content-type": "application/json"
-    //     },
-    //     "body": JSON.stringify(postData)
-    //   })
-
-    //   let info_json = await response.json()
-
-    //   console.log(info_json)
-
       stockInfo()
       stockFinancials()
       stockNews()
+
+      // Make the attribute blank again - give it a clean slate for the input field
+      searchInput.setAttribute('data-search-symbol',"")
+      spinner.style.display = "none"
+      
 }
 
 
@@ -181,7 +184,8 @@ async function candlestickPlot(period="1y"){
 
 
 let stockInfo = async () => {
-    let stockSymbol = document.getElementById("symbol").value
+    const searchInput = document.getElementById("searchInput")
+    const stockSymbol = searchInput.getAttribute('data-search-symbol')
     let postData = {"Symbol": stockSymbol}
 
     let response = await fetch("/info", 
@@ -209,7 +213,8 @@ let stockInfo = async () => {
 
 
 let stockFinancials = async () => {
-  let stockSymbol = document.getElementById("symbol").value
+  const searchInput = document.getElementById("searchInput")
+  const stockSymbol = searchInput.getAttribute('data-search-symbol')
   let postData = {"Symbol": stockSymbol}
 
   let response = await fetch("/financials",
@@ -228,7 +233,8 @@ let stockFinancials = async () => {
 
 
 let stockNews = async () => {
-  let stockSymbol = document.getElementById("symbol").value
+  const searchInput = document.getElementById("searchInput")
+  const stockSymbol = searchInput.getAttribute('data-search-symbol')
   let postData = {"Symbol": stockSymbol}
 
   let response = await fetch("/news",
@@ -253,8 +259,27 @@ dateConvert = (dates) => {
   return dateObjects
 }
 
+// This will run everytime the script.js is imported into a webpage
+// This may not be behaviour we want if we don't want to run this function on certain webpages
+// candlestickPlot()
 
-candlestickPlot()
+const options = document.querySelectorAll('option')
 
+options.forEach(option => {
+  option.addEventListener('click', e =>{
+    // Get the input html element
+    const searchInput = document.getElementById('searchInput')
+    
+    if(searchInput.value == ""){
+      searchInput.setAttribute('data-search-symbol',option.value)
+    }
+    else{
+      searchInput.setAttribute('data-search-symbol',"")
+      searchInput.setAttribute('data-search-symbol',option.value)
+    }
+    // Populate the input field with the select option text
+    searchInput.value = option.innerText
+  })
+})
 
 

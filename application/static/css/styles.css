@@ -1,6 +1,5 @@
 
 h1,label,p,h3{
-    color: white;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -30,8 +29,6 @@ button{
     border-radius: 25px;
 }
 
-
-
 #container{
     background-color: rgba(17,22,35);
     display: grid;
@@ -41,16 +38,6 @@ button{
     padding: 1em;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 25px;
-}
-
-.heading-card{
-    grid-row: 1/2;
-    grid-column: 1/2;
-}
-
-.dropdown-card{
-    grid-row: 2/3;
-    grid-column: 1/2;
 }
 
 .indicator-card{
@@ -86,4 +73,56 @@ button{
 #info-card p, #info-card h3{
     flex: 1 1 auto;
     margin: 10px;
+}
+
+.main-svg{
+    width: 100%;
+    border-radius: 25px
+}
+
+/* styles.css */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 100%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    height: 250px;
+    overflow: auto;
+}
+
+.dropdown-content option {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content option:hover {
+    background-color: #ddd;
+}
+
+.dropdown.show .dropdown-content {
+    display: block;
+}
+
+option {
+    cursor: pointer;
+  }
+
+.mr-sm-custom {
+    margin-right: 5rem !important; /* Custom large margin */
+}
+
+.form-inline .form-control{
+    width:95% !important;  /* Custom search bar width */
 }

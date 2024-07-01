@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+
+{% block title %}
+    Stock Dashboard
+{% endblock %}
 {% block body %}
     <div class="indicator-card">
         <div id="close-indicator"></div>
@@ -13,18 +17,63 @@
     </div>
 
     <div class="chart-card">
-        <div id="candlestickChart"></div>
+        <div id="candlestickChart" data-candlestick=""></div>
         <div id="macd"></div>
     </div>
 
     <div id="info-card">
-        <h3>About</h3>
-        <p id="info-summary">Summary:</p>
-        <p id="info-industry">Industry:</p>
-        <p id="info-sector">Sector:</p>
-        <p id="info-address">Address:</p>
-        <p id="info-state">State:</p>
-        <p id="info-country">County:</p>
-        <p id="info-website">Website:</p>
+        <h3 class="text-light">About</h3>
+        <p id="info-industry" class="font-weight-bold text-light">Industry:</p>
+        <p id="info-sector" class="font-weight-bold text-light">Sector:</p>
+        <p id="info-address" class="font-weight-bold text-light">Address:</p>
+        <p id="info-state" class="font-weight-bold text-light">State:</p>
+        <p id="info-country" class="font-weight-bold text-light">County:</p>
+        <p id="info-website" class="font-weight-bold text-light">Website:</p>
     </div>
+{% endblock %}
+
+
+{% block extraScripts %}
+
+<script>
+// candlestickPlot()
+
+
+const input = document.querySelector('input')
+input.addEventListener('input', (e)=>{
+    console.log(e.target.value)
+})
+
+// script.js
+document.addEventListener("DOMContentLoaded", function() {
+    const dropdownInput = document.getElementById("searchInput");
+    const dropdownOptions = document.getElementById("dropdownOptions");
+
+    dropdownInput.addEventListener("input", function() {
+        const filter = dropdownInput.value.toLowerCase();
+        const options = dropdownOptions.getElementsByTagName("option");
+
+        for (let i = 0; i < options.length; i++) {
+            const txtValue = options[i].textContent || options[i].innerText;
+            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                options[i].style.display = "";
+            } else {
+                options[i].style.display = "none";
+            }
+        }
+    });
+
+    dropdownInput.addEventListener("focus", function() {
+        dropdownOptions.parentNode.classList.add("show");
+    });
+
+    document.addEventListener("click", function(event) {
+        if (!event.target.matches('#searchInput')) {
+            dropdownOptions.parentNode.classList.remove("show");
+        }
+    });
+});
+
+</script>
+
 {% endblock %}

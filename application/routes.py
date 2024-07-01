@@ -1,10 +1,13 @@
-from flask import render_template, jsonify, request, make_response
+from application import application
+from flask import render_template, jsonify, request, make_response, abort
 import yfinance as yf
 import pandas as pd
 from dotenv import load_dotenv
 import os 
+import time
+# import concurrent.futures
 import requests
-from . import application
+
 
 # load the .env file
 load_dotenv()
@@ -19,6 +22,73 @@ crypto = pd.read_csv("application/static/CryptocurrencyData.csv")
 crypto_coins = crypto[['Coin Name',"Symbol"]]
 
 
+@application.route("/home",methods=["GET"])
+def home():
+    start = time.perf_counter()
+    ticker_dict = {"Ticker": [],
+                 "Change": [],
+                 "Price": [],
+                 "Volume": [],
+                 "Float": [],
+                 "MCAP": []
+                 }
+    for symbol in symbols['Symbol']:
+        try:
+            ticker = yf.Ticker(symbol)
+            ticker_info = ticker.info
+            ticker_dict['Volume'].append(ticker_info['volume'])
+            ticker_dict['Price'].append(ticker_info['currentPrice'])
+            ticker_dict['MCAP'].append(ticker_info['marketCap'])
+            ticker_dict['Float'].append(ticker_info['floatShares'])
+            percent_change = ((ticker_info['currentPrice']-ticker_info['open'])/ticker_info['open'])*100
+            ticker_dict['Change'].append(percent_change)
+            ticker_dict['Ticker'].append(symbol)
+        except:
+            print(f"Info could not be found for {symbol}")
+
+    end = time.perf_counter()
+
+    print(f"It took {end-start}s to run the block of code!")    
+    ticker_dict = pd.DataFrame(ticker_dict)
+    ticker_dict = ticker_dict.to_dict(orient="records")
+    return render_template("home.html", ticker_dict = ticker_dict)
+
+# def fetch_ticker_info(symbol):
+#     try:
+#         ticker = yf.Ticker(symbol)
+#         ticker_info = ticker.info
+#         percent_change = ((ticker_info['currentPrice'] - ticker_info['open']) / ticker_info['open']) * 100
+#         return {
+#             "Ticker": symbol,
+#             "Change": percent_change,
+#             "Price": ticker_info.get('currentPrice'),
+#             "Volume": ticker_info.get('volume'),
+#             "Float": ticker_info.get('floatShares'),
+#             "MCAP": ticker_info.get('marketCap')
+#         }
+#     except Exception as e:
+#         print(f"Info could not be found for {symbol}: {e}")
+#         return None
+
+# @application.route("/home", methods=["GET"])
+# def home():
+#     ticker_dict = {"Ticker": [], "Change": [], "Price": [], "Volume": [], "Float": [], "MCAP": []}
+
+#     with concurrent.futures.ThreadPoolExecutor() as executor:
+#         futures = [executor.submit(fetch_ticker_info, symbol) for symbol in symbols['Symbol']]
+#         for future in concurrent.futures.as_completed(futures):
+#             result = future.result()
+#             if result:
+#                 ticker_dict["Ticker"].append(result["Ticker"])
+#                 ticker_dict["Change"].append(result["Change"])
+#                 ticker_dict["Price"].append(result["Price"])
+#                 ticker_dict["Volume"].append(result["Volume"])
+#                 ticker_dict["Float"].append(result["Float"])
+#                 ticker_dict["MCAP"].append(result["MCAP"])
+
+#     ticker_df = pd.DataFrame(ticker_dict)
+#     ticker_dict = ticker_df.to_dict(orient="records")
+#     return render_template("home.html", ticker_dict=ticker_dict)
 
 @application.route("/")
 def index():
@@ -30,6 +100,10 @@ def index():
 def stock():
     stock = request.get_json()
     symbol = stock["Symbol"]
+    
+    if symbol == '':
+        print("Aborted!")
+        abort(500)
     period = stock['Period']
     print(period)
     interval = "1d"
